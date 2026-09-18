@@ -1,0 +1,4 @@
+"use client";
+import seed from "@/data/seed-executions.json"; import type{Execution}from"./types"; import{normalizeExecution}from"./domain";
+const KEY="sp255_executions_v1"; export function loadExecutions(){if(typeof window==="undefined")return(seed as Execution[]).map(normalizeExecution);const raw=localStorage.getItem(KEY);if(!raw){const s=(seed as Execution[]).map(normalizeExecution);localStorage.setItem(KEY,JSON.stringify(s));return s;}try{return(JSON.parse(raw)as Execution[]).map(normalizeExecution)}catch{return(seed as Execution[]).map(normalizeExecution)}}
+export function saveExecutions(v:Execution[]){localStorage.setItem(KEY,JSON.stringify(v));} export function mergeExecutions(cur:Execution[],inc:Execution[]){const m=new Map(cur.map(x=>[x.id,x]));for(const x of inc)m.set(x.id,x);const out=Array.from(m.values());saveExecutions(out);return out;}

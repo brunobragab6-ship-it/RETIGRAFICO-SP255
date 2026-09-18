@@ -1,0 +1,192 @@
+[
+  {
+    "type": "FRENTE",
+    "code": "A",
+    "name": "Frente A",
+    "km_start": 83920,
+    "km_end": 86920,
+    "lot": "2A",
+    "section": "Trecho 1"
+  },
+  {
+    "type": "FRENTE",
+    "code": "B",
+    "name": "Frente B",
+    "km_start": 86920,
+    "km_end": 94000,
+    "lot": "2A",
+    "section": "Trecho 1"
+  },
+  {
+    "type": "FRENTE",
+    "code": "C",
+    "name": "Frente C",
+    "km_start": 96500,
+    "km_end": 100500,
+    "lot": "2A",
+    "section": "Trecho 1"
+  },
+  {
+    "type": "FRENTE",
+    "code": "D",
+    "name": "Frente D",
+    "km_start": 100500,
+    "km_end": 105500,
+    "lot": "2A",
+    "section": "Trecho 1"
+  },
+  {
+    "type": "FRENTE",
+    "code": "E",
+    "name": "Frente E",
+    "km_start": 105500,
+    "km_end": 111500,
+    "lot": "2A",
+    "section": "Trecho 1"
+  },
+  {
+    "type": "FRENTE",
+    "code": "F",
+    "name": "Frente F",
+    "km_start": 111500,
+    "km_end": 117220,
+    "lot": "2A",
+    "section": "Trecho 1"
+  },
+  {
+    "type": "FRENTE",
+    "code": "G",
+    "name": "Frente G",
+    "km_start": 117380,
+    "km_end": 123480,
+    "lot": "2B",
+    "section": "Trecho 2"
+  },
+  {
+    "type": "FRENTE",
+    "code": "H",
+    "name": "Frente H",
+    "km_start": 124400,
+    "km_end": 129400,
+    "lot": "2B",
+    "section": "Trecho 2"
+  },
+  {
+    "type": "FRENTE",
+    "code": "I",
+    "name": "Frente I",
+    "km_start": 129400,
+    "km_end": 133400,
+    "lot": "2B",
+    "section": "Trecho 2"
+  },
+  {
+    "type": "FRENTE",
+    "code": "J",
+    "name": "Frente J",
+    "km_start": 133400,
+    "km_end": 137950,
+    "lot": "2B",
+    "section": "Trecho 2"
+  },
+  {
+    "type": "DISPOSITIVO",
+    "code": "D1",
+    "name": "Dispositivo D1",
+    "km_anchor": 90950
+  },
+  {
+    "type": "DISPOSITIVO",
+    "code": "D2",
+    "name": "Dispositivo D2",
+    "km_anchor": 96650
+  },
+  {
+    "type": "DISPOSITIVO",
+    "code": "D3",
+    "name": "Dispositivo D3",
+    "km_anchor": 100500
+  },
+  {
+    "type": "DISPOSITIVO",
+    "code": "D4",
+    "name": "Dispositivo D4",
+    "km_anchor": 105500
+  },
+  {
+    "type": "DISPOSITIVO",
+    "code": "D5",
+    "name": "Dispositivo D5",
+    "km_anchor": 118780
+  },
+  {
+    "type": "DISPOSITIVO",
+    "code": "D6",
+    "name": "Dispositivo D6",
+    "km_anchor": 129300
+  },
+  {
+    "type": "DISPOSITIVO",
+    "code": "D7",
+    "name": "Dispositivo D7",
+    "km_anchor": 133500
+  },
+  {
+    "type": "REMODELACAO",
+    "code": "R1",
+    "name": "Remodelação R1",
+    "km_anchor": 84950
+  },
+  {
+    "type": "REMODELACAO",
+    "code": "R2",
+    "name": "Remodelação R2",
+    "km_anchor": 85760
+  },
+  {
+    "type": "REMODELACAO",
+    "code": "R3",
+    "name": "Remodelação R3",
+    "km_anchor": 112570
+  },
+  {
+    "type": "REMODELACAO",
+    "code": "R4",
+    "name": "Remodelação R4",
+    "km_anchor": 113850
+  },
+  {
+    "type": "REMODELACAO",
+    "code": "R5",
+    "name": "Remodelação R5",
+    "km_anchor": 122950
+  },
+  {
+    "type": "OAE",
+    "code": "OAE-084100-S",
+    "name": "OAE KM 084+100 Pista Sul",
+    "km_anchor": 84100,
+    "direction": "PS"
+  },
+  {
+    "type": "OAE",
+    "code": "OAE-084100-N",
+    "name": "OAE KM 084+100 Pista Norte",
+    "km_anchor": 84100,
+    "direction": "PN"
+  },
+  {
+    "type": "OAE",
+    "code": "OAE-112200-N",
+    "name": "OAE KM 112+200 Pista Norte",
+    "km_anchor": 112200,
+    "direction": "PN"
+  },
+  {
+    "type": "OAE",
+    "code": "OAE-122197-N",
+    "name": "OAE KM 122+197 Pista Norte",
+    "km_anchor": 122197,
+    "direction": "PN"
+  }
+]
