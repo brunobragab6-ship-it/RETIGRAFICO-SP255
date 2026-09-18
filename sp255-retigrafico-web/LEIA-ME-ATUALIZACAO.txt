@@ -1,0 +1,15 @@
+ATUALIZAÇÃO SP-255 v0.2 — RECURSOS + COMPACTAÇÃO + PRÉVIA DE MEDIÇÃO
+
+1) Extraia este ZIP.
+2) No GitHub, abra o repositório RETIGRAFICO-SP255 na raiz.
+3) Arraste a pasta "sp255-retigrafico-web" deste pacote para o upload do GitHub.
+4) Confirme que os arquivos existentes aparecem como alterados e os novos como adicionados.
+5) Commit changes.
+6) O Vercel fará o deploy automaticamente.
+7) Abra o sistema, clique em "LIMPAR BASE / REIMPORTAR" e importe novamente o Excel Apontamentos (simplificado).
+
+IMPORTANTE:
+- Esta versão usa uma nova base local v2 para não misturar os registros manuais/seeds antigos.
+- A tela de importação aceita somente Apontamentos (simplificado).xlsx.
+- A aba Prévia Medição gera PREVIA 2A, PREVIA 2B, MEMORIA DIARIA e PENDENCIAS.
+- Compactações existentes no arquivo aparecem em Acumulado/MED correspondente. O arquivo analisado não possui compactações executadas dentro da MED 06.

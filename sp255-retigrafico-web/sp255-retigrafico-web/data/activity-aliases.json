@@ -1,0 +1,260 @@
+[
+  {
+    "alias": "Aparelho de apoio fretado NEOPRENE (dm³)",
+    "activity_id": "ACT-0111",
+    "source": "Kartado",
+    "confidence": 1.0
+  },
+  {
+    "alias": "Aço CA-50 para concreto armado, aplicação sem fornecimento de materiais. (kg)",
+    "activity_id": "ACT-0109",
+    "source": "Kartado",
+    "confidence": 1.0
+  },
+  {
+    "alias": "Bueiro duplo tubular de concreto PA4 com berço de concreto - Ø 1,50 m - Sem o fornecimento do tubo (m)",
+    "activity_id": "ACT-0050",
+    "source": "Kartado",
+    "confidence": 1.0
+  },
+  {
+    "alias": "Bueiro simples tubular de concreto PA2 com berço de brita - Ø 0,80 m, sem o fornecimento do tubo (m)",
+    "activity_id": "ACT-0042",
+    "source": "Kartado",
+    "confidence": 1.0
+  },
+  {
+    "alias": "Bueiro simples tubular de concreto PA4 com berço de brita - Ø 1,00 m, sem o fornecimento do tubo (m)",
+    "activity_id": "ACT-0222",
+    "source": "Kartado",
+    "confidence": 1.0
+  },
+  {
+    "alias": "Carga de material em Bota Espera - material de 1ª e 2ª categoria (*) (m³)",
+    "activity_id": "ACT-0324",
+    "source": "Kartado",
+    "confidence": 1.0
+  },
+  {
+    "alias": "Cimbramento metálico (m³)",
+    "activity_id": "ACT-0100",
+    "source": "Kartado",
+    "confidence": 1.0
+  },
+  {
+    "alias": "Compactação de aterro a 95% do proctor normal (m³)",
+    "activity_id": "ACT-0024",
+    "source": "Kartado",
+    "confidence": 1.0
+  },
+  {
+    "alias": "Concreto Fck 10 Mpa, sem fornecimento de materiais e sem transporte do material (m³)",
+    "activity_id": "ACT-0104",
+    "source": "Kartado",
+    "confidence": 1.0
+  },
+  {
+    "alias": "Concreto Fck 30 Mpa, sem fornecimento de materiais e sem transporte do material (m³)",
+    "activity_id": "ACT-0105",
+    "source": "Kartado",
+    "confidence": 1.0
+  },
+  {
+    "alias": "Concreto Fck 40 MPa, sem fornecimento de materiais e sem transporte do material (m³)",
+    "activity_id": "ACT-0159",
+    "source": "Kartado",
+    "confidence": 1.0
+  },
+  {
+    "alias": "Demolição de dispositivos de concreto simples (m³)",
+    "activity_id": "ACT-0008",
+    "source": "Kartado",
+    "confidence": 1.0
+  },
+  {
+    "alias": "Demolição de pavimento, camada granular (m³)",
+    "activity_id": "ACT-0030",
+    "source": "Kartado",
+    "confidence": 1.0
+  },
+  {
+    "alias": "Demolição de pavimento, revestimento betuminoso (m³)",
+    "activity_id": "ACT-0029",
+    "source": "Kartado",
+    "confidence": 1.0
+  },
+  {
+    "alias": "Derrubada e destocamento arv. c/ diâmetro > 0,15 m (un)",
+    "activity_id": "ACT-0187",
+    "source": "Kartado",
+    "confidence": 1.0
+  },
+  {
+    "alias": "Derrubada e destocamento.arv. c/ diâmetro 20<>30cm, com limpeza da área (un)",
+    "activity_id": "ACT-0188",
+    "source": "Kartado",
+    "confidence": 1.0
+  },
+  {
+    "alias": "Derrubada e destocamento.arv. c/ diâmetro 30<>40cm, com limpeza da área (un)",
+    "activity_id": "ACT-0189",
+    "source": "Kartado",
+    "confidence": 1.0
+  },
+  {
+    "alias": "Derrubada e destocamento.arv. c/ diâmetro 40<>50cm, com limpeza da área (un)",
+    "activity_id": "ACT-0190",
+    "source": "Kartado",
+    "confidence": 1.0
+  },
+  {
+    "alias": "Derrubada e destocamento.arv. c/ diâmetro 50<>60cm, com limpeza da área (un)",
+    "activity_id": "ACT-0191",
+    "source": "Kartado",
+    "confidence": 1.0
+  },
+  {
+    "alias": "Derrubada e destocamento.arv. c/ diâmetro 60<>70cm, com limpeza da área (un)",
+    "activity_id": "ACT-0192",
+    "source": "Kartado",
+    "confidence": 1.0
+  },
+  {
+    "alias": "Derrubada e destocamento.arv. c/ diâmetro 70<> 80cm, com limpeza da área (un)",
+    "activity_id": "ACT-0193",
+    "source": "Kartado",
+    "confidence": 1.0
+  },
+  {
+    "alias": "Derrubada e destocamento.arv. c/ diâmetro > 80cm, com limpeza da área (un)",
+    "activity_id": "ACT-0194",
+    "source": "Kartado",
+    "confidence": 1.0
+  },
+  {
+    "alias": "Dreno longitudinal de pavimento H = 0,40 m - sem o tubo e o geocomposto drenante (m)",
+    "activity_id": "ACT-0097",
+    "source": "Kartado",
+    "confidence": 1.0
+  },
+  {
+    "alias": "Dreno transversal raso DTR, sem o fornecimento dos materiais (m)",
+    "activity_id": "ACT-0095",
+    "source": "Kartado",
+    "confidence": 1.0
+  },
+  {
+    "alias": "Escavação de solo com baixa capacidade de suporte (m³)",
+    "activity_id": "ACT-0026",
+    "source": "Kartado",
+    "confidence": 1.0
+  },
+  {
+    "alias": "Escavação de solo mole (m³)",
+    "activity_id": "ACT-0201",
+    "source": "Kartado",
+    "confidence": 1.0
+  },
+  {
+    "alias": "Escavação mecânica para obra de arte especial  de 1ª e 2ª cat (m³)",
+    "activity_id": "ACT-0101",
+    "source": "Kartado",
+    "confidence": 1.0
+  },
+  {
+    "alias": "Fundação / reaterro com pedra rachão (m³)",
+    "activity_id": "ACT-0202",
+    "source": "Kartado",
+    "confidence": 1.0
+  },
+  {
+    "alias": "Gabião tipo caixa com malha hexagonal - galvanizado - alt. cx 0,50m (m³)",
+    "activity_id": "ACT-0299",
+    "source": "Kartado",
+    "confidence": 1.0
+  },
+  {
+    "alias": "Gabião tipo caixa com malha hexagonal - galvanizado - alt. cx 1,00m (m³)",
+    "activity_id": "ACT-0300",
+    "source": "Kartado",
+    "confidence": 1.0
+  },
+  {
+    "alias": "Imprimadura impermeabilizante com EAI - Sem o fornecimento dos materias (m²)",
+    "activity_id": "ACT-0035",
+    "source": "Kartado",
+    "confidence": 1.0
+  },
+  {
+    "alias": "Imprimadura ligante (Cura) - sem o fornecimento dos materiais (m²)",
+    "activity_id": "ACT-0036",
+    "source": "Kartado",
+    "confidence": 1.0
+  },
+  {
+    "alias": "Limpeza do terreno com destocamento de árvore d=<0,15m (m²)",
+    "activity_id": "ACT-0012",
+    "source": "Kartado",
+    "confidence": 1.0
+  },
+  {
+    "alias": "Reaterro compactado com solo - compactação manual (m³)",
+    "activity_id": "ACT-0157",
+    "source": "Kartado",
+    "confidence": 1.0
+  },
+  {
+    "alias": "Regularização e compactação de fundo de cavas (m²)",
+    "activity_id": "ACT-0103",
+    "source": "Kartado",
+    "confidence": 1.0
+  },
+  {
+    "alias": "Remanejamento de semi-pórtico (un)",
+    "activity_id": "ACT-0184",
+    "source": "Kartado",
+    "confidence": 1.0
+  },
+  {
+    "alias": "Remoção de cerca (m)",
+    "activity_id": "ACT-0001",
+    "source": "Kartado",
+    "confidence": 1.0
+  },
+  {
+    "alias": "Remoção de defensa metálica (m)",
+    "activity_id": "ACT-0002",
+    "source": "Kartado",
+    "confidence": 1.0
+  },
+  {
+    "alias": "Remoção de terminal absorvedor de energia (un)",
+    "activity_id": "ACT-0361",
+    "source": "Kartado",
+    "confidence": 1.0
+  },
+  {
+    "alias": "Solo cimento com adição de 3% cimento,mistura in situ- Recicladora (m³)",
+    "activity_id": "ACT-0032",
+    "source": "Kartado",
+    "confidence": 1.0
+  },
+  {
+    "alias": "Transporte de material de limpeza além de 1 km (m³ x km)",
+    "activity_id": "ACT-0013",
+    "source": "Kartado",
+    "confidence": 1.0
+  },
+  {
+    "alias": "Estaca raiz Ø 0,41 m em solo (Revisada Taxa de Aço) (m)",
+    "activity_id": "ACT-0098",
+    "source": "Kartado",
+    "confidence": 1.0
+  },
+  {
+    "alias": "Estaca raiz Ø 0,41 m em solo (Revisada Inclinação) (m)",
+    "activity_id": "ACT-0098",
+    "source": "Kartado",
+    "confidence": 1.0
+  }
+]
