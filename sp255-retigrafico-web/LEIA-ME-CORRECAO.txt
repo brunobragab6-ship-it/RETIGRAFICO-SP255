@@ -1,0 +1,16 @@
+CORREÇÃO v0.2.1 — CAMINHO DUPLICADO NO GITHUB
+
+IMPORTANTE: NÃO envie a pasta SP255_CORRECAO_CAMINHO_v0.2.1 inteira.
+
+1) No GitHub, entre em: RETIGRAFICO-SP255 / sp255-retigrafico-web
+2) Clique Add file > Upload files
+3) No computador, abra esta pasta extraída.
+4) Selecione TODOS OS ITENS DE DENTRO dela (app, components, data, docs, lib, types, package.json, tsconfig.json etc.).
+5) Arraste os ITENS para o GitHub.
+6) Antes do commit, confirme que o caminho final será somente:
+   RETIGRAFICO-SP255/sp255-retigrafico-web/lib/measurement-preview.ts
+   e NÃO:
+   RETIGRAFICO-SP255/sp255-retigrafico-web/sp255-retigrafico-web/lib/measurement-preview.ts
+7) Commit changes.
+
+O tsconfig desta correção também ignora a pasta duplicada antiga, então ela não bloqueará o build.

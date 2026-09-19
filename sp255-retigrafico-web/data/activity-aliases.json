@@ -244,5 +244,17 @@
     "activity_id": "ACT-0013",
     "source": "Kartado",
     "confidence": 1.0
+  },
+  {
+    "alias": "Estaca raiz Ø 0,41 m em solo (Revisada Taxa de Aço) (m)",
+    "activity_id": "ACT-0098",
+    "source": "Kartado",
+    "confidence": 1.0
+  },
+  {
+    "alias": "Estaca raiz Ø 0,41 m em solo (Revisada Inclinação) (m)",
+    "activity_id": "ACT-0098",
+    "source": "Kartado",
+    "confidence": 1.0
   }
 ]
