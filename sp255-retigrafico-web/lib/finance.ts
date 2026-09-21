@@ -1,6 +1,6 @@
 import contractPricesData from "@/data/contract-prices.json";
 import { CATALOG } from "./domain";
-import type { Execution } from "./types";
+import type { ActivityCatalogItem, Execution } from "./types";
 
 type ContractPrice = { lot: string; code: string; description: string; unit: string; unit_price: number };
 const CONTRACT_PRICES = contractPricesData as ContractPrice[];
@@ -16,10 +16,18 @@ export function activityCode(x: Execution) {
   return x.activity_id ? (CATALOG.find(a => a.id === x.activity_id)?.code || "") : "";
 }
 
+export function contractUnitPrice(lot: string | null | undefined, code: string | null | undefined) {
+  if (!lot || !code) return null;
+  return priceByLotCode.get(`${lot}|${code}`) ?? null;
+}
+
+export function contractUnitPriceForActivity(lot: string | null | undefined, activity: ActivityCatalogItem | null | undefined) {
+  return activity ? contractUnitPrice(lot, activity.code) : null;
+}
+
 export function executionUnitPrice(x: Execution, code = activityCode(x)) {
   if (typeof x.unit_price === "number" && Number.isFinite(x.unit_price)) return x.unit_price;
-  if (code && x.lot) return priceByLotCode.get(`${x.lot}|${code}`) ?? null;
-  return null;
+  return contractUnitPrice(x.lot, code);
 }
 
 export function executionValue(x: Execution, code = activityCode(x)) {

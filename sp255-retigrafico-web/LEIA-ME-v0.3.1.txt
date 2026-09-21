@@ -1,0 +1,19 @@
+ATUALIZAÇÃO v0.3.1 — RETIGRÁFICO MANUAL COM RECURSOS DO CONTRATO
+
+O que mudou:
+- Natureza no lançamento manual virou seleção baseada no catálogo contratual.
+- Classe virou seleção dependente da Natureza.
+- Recurso virou seleção dependente de Natureza + Classe + Empresa + Frente/Estrutura.
+- Recursos são filtrados conforme os itens contratuais aplicáveis ao local e à empresa.
+- Código, unidade, lote e valor unitário são preenchidos automaticamente.
+- O valor unitário é obtido do contrato conforme Lote 2A ou Lote 2B.
+- Mostra R$ previsto = quantidade x valor unitário antes de salvar.
+- O lançamento manual salva o activity_id canônico, evitando atividade pendente de vínculo.
+- Catálogo de Atividades agora mostra R$ unitário dos lotes 2A e 2B.
+
+Para atualizar:
+1. Entre no GitHub > RETIGRAFICO-SP255 > sp255-retigrafico-web.
+2. Add file > Upload files.
+3. Extraia este ZIP e arraste OS ITENS DE DENTRO da pasta para sp255-retigrafico-web.
+4. Commit directly to main.
+5. Aguarde o Vercel ficar Ready.

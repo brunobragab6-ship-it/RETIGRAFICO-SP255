@@ -2,9 +2,10 @@
 import { useMemo, useState } from "react";
 import { useExecutions } from "@/components/ExecutionProvider";
 import MultiFilter from "@/components/MultiFilter";
-import { LOCATIONS, executionCompany, formatKm, measurementForDate, normalizeExecution } from "@/lib/domain";
-import { executionUnitPrice, executionValue } from "@/lib/finance";
+import { CATALOG, LOCATIONS, executionCompany, formatKm, measurementForDate, normalizeExecution } from "@/lib/domain";
+import { contractUnitPriceForActivity, executionUnitPrice, executionValue } from "@/lib/finance";
 import { activityRows, displayResource, makeBuckets, overlaps } from "@/lib/retigraph";
+import type { ActivityCatalogItem, Location } from "@/lib/types";
 
 function fmt(n: unknown) {
   return typeof n === "number" ? n.toLocaleString("pt-BR", { maximumFractionDigits: 3 }) : String(n ?? "");
@@ -13,6 +14,13 @@ function money(n: number | null | undefined) {
   return typeof n === "number" && Number.isFinite(n) ? n.toLocaleString("pt-BR", { style: "currency", currency: "BRL" }) : "-";
 }
 const accepted = (s?: string | null) => ["Executado", "Aprovado", ""].includes(s || "");
+
+function locationLot(loc?: Location | null) {
+  if (!loc) return null;
+  if (loc.lot) return loc.lot;
+  const km = loc.km_anchor ?? loc.km_start ?? null;
+  return km == null ? null : km < 117380 ? "2A" : "2B";
+}
 
 export default function Retigrafico() {
   const { executions, add } = useExecutions();
@@ -26,7 +34,19 @@ export default function Retigrafico() {
   const [dateEnd, setDateEnd] = useState("");
   const [manualOpen, setManualOpen] = useState(false);
   const [manualMsg, setManualMsg] = useState("");
-  const [manual, setManual] = useState({ date: new Date().toISOString().slice(0, 10), local: "C", nature: "Terraplenagem", className: "", resource: "", kmStart: "", kmEnd: "", direction: "PN", quantity: "", unit: "m³", unitPrice: "", company: "Val Rocha", notes: "" });
+  const [manual, setManual] = useState({
+    date: new Date().toISOString().slice(0, 10),
+    local: "C",
+    nature: "",
+    className: "",
+    activityId: "",
+    kmStart: "",
+    kmEnd: "",
+    direction: "PN",
+    quantity: "",
+    company: "Val Rocha",
+    notes: ""
+  });
   const loc = LOCATIONS.find(x => x.code === local)!;
 
   const measurements = useMemo(() => Array.from(new Set(executions.map(x => x.measurement).filter(Boolean))).sort(), [executions]);
@@ -54,34 +74,55 @@ export default function Retigrafico() {
   const acts = activityRows(filtered);
   const unrepresented = isFront ? filtered.filter(x => x.km_min_m == null || x.km_max_m == null) : [];
 
+  const manualLoc = LOCATIONS.find(x => x.code === manual.local) || null;
+  const manualLot = locationLot(manualLoc);
+  const manualCatalogBase = useMemo(() => CATALOG.filter(a =>
+    a.active && a.companies.includes(manual.company)
+  ), [manual.company]);
+  const manualNatures = useMemo(() => Array.from(new Set(manualCatalogBase.map(a => a.group))).sort((a,b)=>a.localeCompare(b,"pt-BR")), [manualCatalogBase]);
+  const manualClasses = useMemo(() => Array.from(new Set(manualCatalogBase.filter(a => !manual.nature || a.group === manual.nature).map(a => a.subgroup))).sort((a,b)=>a.localeCompare(b,"pt-BR")), [manualCatalogBase, manual.nature]);
+  const manualResources = useMemo(() => manualCatalogBase
+    .filter(a => (!manual.nature || a.group === manual.nature) && (!manual.className || a.subgroup === manual.className))
+    .sort((a,b) => a.name.localeCompare(b.name, "pt-BR")), [manualCatalogBase, manual.nature, manual.className]);
+  const manualActivity = CATALOG.find(a => a.id === manual.activityId) || null;
+  const manualUnitPrice = contractUnitPriceForActivity(manualLot, manualActivity);
+
+  function resetManualResource(patch: Partial<typeof manual>) {
+    setManual(v => ({ ...v, ...patch, activityId: "" }));
+    setManualMsg("");
+  }
+
   function saveManual() {
-    if (!manual.date || !manual.resource) { setManualMsg("Informe pelo menos Data e Atividade/Recurso."); return; }
+    if (!manual.date || !manualActivity) { setManualMsg("Selecione Data, Natureza, Classe e Recurso contratual."); return; }
     const chosen = LOCATIONS.find(x => x.code === manual.local);
     const ex = normalizeExecution({
       id: `manual-${Date.now()}`,
       date: manual.date,
       measurement: measurementForDate(manual.date),
-      activity_raw: manual.resource,
-      resource_raw: manual.resource,
+      activity_raw: manualActivity.name,
+      resource_raw: manualActivity.name,
+      activity_id: manualActivity.id,
+      activity_name: manualActivity.name,
       km_start_raw: manual.kmStart || chosen?.km_anchor || null,
       km_end_raw: manual.kmEnd || manual.kmStart || chosen?.km_anchor || null,
-      nature: manual.nature,
-      class: manual.className,
+      nature: manualActivity.group,
+      class: manualActivity.subgroup,
       direction: manual.direction,
       quantity: manual.quantity ? Number(String(manual.quantity).replace(",", ".")) : null,
-      unit: manual.unit,
-      unit_price: manual.unitPrice ? Number(String(manual.unitPrice).replace(",", ".")) : null,
+      unit: manualActivity.unit,
+      unit_price: manualUnitPrice,
       company: manual.company,
       source: "lançamento manual",
       status: "Executado",
       notes: manual.notes,
       front: chosen?.type === "FRENTE" ? chosen.code : null,
       location_type: chosen?.type || null,
-      location_code: chosen?.code || null
+      location_code: chosen?.code || null,
+      lot: manualLot
     });
     add([ex]);
-    setManualMsg(`Lançamento manual salvo em ${chosen?.name || manual.local}.`);
-    setManual(v => ({ ...v, resource: "", quantity: "", notes: "" }));
+    setManualMsg(`Lançamento salvo: ${manualActivity.code} · ${manualActivity.name} · ${money(manualUnitPrice)}/${manualActivity.unit}.`);
+    setManual(v => ({ ...v, activityId: "", quantity: "", notes: "" }));
   }
 
   return <>
@@ -102,22 +143,29 @@ export default function Retigrafico() {
 
     {manualOpen && <div className="manual-panel">
       <b>LANÇAMENTO MANUAL DO RETIGRÁFICO</b>
-      <div className="subtle-note">Use quando precisar registrar um avanço que ainda não veio no Kartado. O lançamento fica salvo junto à base local e pode ser filtrado normalmente.</div>
+      <div className="subtle-note">Selecione Natureza → Classe → Recurso diretamente do contrato. A lista não depende de digitação livre; unidade, código e valor unitário são preenchidos automaticamente conforme o lote.</div>
       <div className="manual-grid" style={{ marginTop: 10 }}>
         <label>Data<input className="input" type="date" value={manual.date} onChange={e => setManual({ ...manual, date: e.target.value })} /></label>
-        <label>Frente / Estrutura<select value={manual.local} onChange={e => setManual({ ...manual, local: e.target.value })}>{LOCATIONS.map(x => <option key={x.code} value={x.code}>{x.type === "FRENTE" ? `Frente ${x.code}` : x.name}</option>)}</select></label>
-        <label>Natureza<input className="input" value={manual.nature} onChange={e => setManual({ ...manual, nature: e.target.value })} /></label>
-        <label>Classe<input className="input" value={manual.className} onChange={e => setManual({ ...manual, className: e.target.value })} /></label>
-        <label className="wide">Atividade / Recurso<input className="input" value={manual.resource} onChange={e => setManual({ ...manual, resource: e.target.value })} placeholder="Ex.: Compactação de aterro a 95% do proctor normal" /></label>
+        <label>Frente / Estrutura<select value={manual.local} onChange={e => resetManualResource({ local: e.target.value, nature: "", className: "" })}>{LOCATIONS.map(x => <option key={x.code} value={x.code}>{x.type === "FRENTE" ? `Frente ${x.code}` : x.name}</option>)}</select></label>
+        <label>Empresa<select value={manual.company} onChange={e => resetManualResource({ company: e.target.value, nature: "", className: "" })}><option>Val Rocha</option><option>Tranenge</option></select></label>
+        <label>Lote<input className="input readonly-field" value={manualLot || "-"} readOnly /></label>
+
+        <label>Natureza<select value={manual.nature} onChange={e => resetManualResource({ nature: e.target.value, className: "" })}><option value="">Selecione...</option>{manualNatures.map(x => <option key={x} value={x}>{x}</option>)}</select></label>
+        <label>Classe<select value={manual.className} disabled={!manual.nature} onChange={e => resetManualResource({ className: e.target.value })}><option value="">Selecione...</option>{manualClasses.map(x => <option key={x} value={x}>{x}</option>)}</select></label>
+        <label className="wide">Recurso contratual<select value={manual.activityId} disabled={!manual.className} onChange={e => setManual({ ...manual, activityId: e.target.value })}><option value="">Selecione o recurso...</option>{manualResources.map(a => <option key={a.id} value={a.id}>{a.code} — {a.name}</option>)}</select></label>
+
+        <label>Código<input className="input readonly-field" value={manualActivity?.code || ""} readOnly /></label>
+        <label>Unidade<input className="input readonly-field" value={manualActivity?.unit || ""} readOnly /></label>
+        <label>R$ unitário (contrato)<input className="input readonly-field" value={manualUnitPrice == null ? "" : manualUnitPrice.toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 4 })} readOnly placeholder={manualActivity ? "Sem preço no lote" : "Selecione o recurso"} /></label>
+        <label>Quantidade<input className="input" value={manual.quantity} onChange={e => setManual({ ...manual, quantity: e.target.value })} /></label>
+
         <label>KM inicial<input className="input" value={manual.kmStart} onChange={e => setManual({ ...manual, kmStart: e.target.value })} placeholder="108+500" /></label>
         <label>KM final<input className="input" value={manual.kmEnd} onChange={e => setManual({ ...manual, kmEnd: e.target.value })} placeholder="109+000" /></label>
         <label>Sentido<select value={manual.direction} onChange={e => setManual({ ...manual, direction: e.target.value })}><option>PN</option><option>PS</option><option>AMBOS</option></select></label>
-        <label>Empresa<select value={manual.company} onChange={e => setManual({ ...manual, company: e.target.value })}><option>Val Rocha</option><option>Tranenge</option></select></label>
-        <label>Quantidade<input className="input" value={manual.quantity} onChange={e => setManual({ ...manual, quantity: e.target.value })} /></label>
-        <label>Unidade<input className="input" value={manual.unit} onChange={e => setManual({ ...manual, unit: e.target.value })} /></label>
-        <label>R$ unitário<input className="input" value={manual.unitPrice} onChange={e => setManual({ ...manual, unitPrice: e.target.value })} /></label>
+        <label>R$ previsto<input className="input readonly-field" value={manualUnitPrice != null && manual.quantity ? money(Number(String(manual.quantity).replace(",", ".")) * manualUnitPrice) : ""} readOnly /></label>
         <label className="wide">Observações<input className="input" value={manual.notes} onChange={e => setManual({ ...manual, notes: e.target.value })} /></label>
       </div>
+      {manualActivity && manualUnitPrice == null && <div className="alert"><b>ATENÇÃO:</b> o recurso foi encontrado no catálogo, mas não há preço contratual único cadastrado para o {manualLot || "lote selecionado"}. O lançamento pode ser salvo, porém ficará sem valor financeiro até o preço ser vinculado.</div>}
       <div className="toolbar"><button className="btn" onClick={saveManual}>SALVAR NO RETIGRÁFICO</button>{manualMsg && <span className="tiny">{manualMsg}</span>}</div>
     </div>}
 
