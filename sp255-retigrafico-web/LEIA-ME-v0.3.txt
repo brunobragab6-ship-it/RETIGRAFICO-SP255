@@ -1,0 +1,25 @@
+SP-255 RETIGRÁFICO — ATUALIZAÇÃO v0.3
+
+Principais ajustes:
+1. Retigráfico: filtros múltiplos por Natureza e Classe.
+2. Filtros por Empresa, Sentido, Medição e datas.
+3. Regra de empresa: EQUIPE 1 TRANENGE - E = Tranenge; demais equipes = Val Rocha.
+4. R$ Unitário e R$ Executado exibidos por atividade/recurso no retigráfico.
+5. Compactações continuam visíveis: serviços de tronco aparecem no KM e serviços de dispositivo ficam na estrutura correspondente; execuções sem KM linear aparecem em lista própria.
+6. Modo Manual do Retigráfico para lançar avanço manual com data, local, atividade, KM, quantidade, unidade, preço e empresa.
+7. Prévia de Medição com período livre (data inicial/final), filtros de Sentido, Empresa, Natureza e Classe.
+8. Exportação única com os DOIS LOTES: PREVIA 2A + PREVIA 2B + MEMORIA DIARIA + PENDENCIAS.
+9. Layout de exportação aproximado ao modelo EAP: III SUBTRECHO / IV GRUPO / V ATIVIDADE / VI SERVIÇO, períodos, quantidade e valor executado.
+10. Excel exportado possui colunas de Responsabilidade/Empresa e Sentido para filtro.
+
+COMO ATUALIZAR NO GITHUB:
+- Entre no repositório RETIGRAFICO-SP255 / sp255-retigrafico-web.
+- Add file > Upload files.
+- Extraia o ZIP e arraste OS ITENS DE DENTRO dele (app, components, lib, package.json...).
+- Não crie outra pasta sp255-retigrafico-web dentro da atual.
+- Commit directly to main.
+- O Vercel fará novo deploy automático.
+
+APÓS PUBLICAR:
+- Reimporte o mesmo Apontamentos (simplificado).xlsx. O sistema faz upsert e não precisa duplicar.
+- Para conferir empresa, a tela de importação mostra Empresa calculada e Equipe original.

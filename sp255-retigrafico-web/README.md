@@ -32,3 +32,11 @@ Veja `docs/VALIDACAO_APONTAMENTOS_E_PREVIA.md`.
 Next.js 15. Diretório raiz no Vercel: `sp255-retigrafico-web`.
 
 Depois de atualizar os arquivos no GitHub, o Vercel faz novo deploy automaticamente.
+
+## v0.3 — filtros, valores, manual e prévia 2A/2B
+- multi-seleção de Natureza e Classe no Retigráfico;
+- Empresa derivada da Equipe: `EQUIPE 1 TRANENGE - E` = Tranenge; demais = Val Rocha;
+- valores unitários e executados no Retigráfico;
+- modo manual de avanço;
+- Prévia por período livre, sentido, empresa, natureza e classe;
+- Excel único com PREVIA 2A, PREVIA 2B, MEMORIA DIARIA e PENDENCIAS.

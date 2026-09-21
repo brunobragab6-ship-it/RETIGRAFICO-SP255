@@ -76,6 +76,15 @@ export function formatKm(m: number | null | undefined) {
   return `${String(k).padStart(3, "0")}+${String(mm).padStart(3, "0")}`;
 }
 
+export function executionCompany(ex: Pick<Execution, "team" | "company">) {
+  const team = normalizeText(ex.team);
+  if (team === normalizeText("EQUIPE 1 TRANENGE - E")) return "Tranenge";
+  // Regra da obra: toda equipe diferente da Equipe 1 TRANENGE - E é Val Rocha.
+  // Para lançamento manual sem equipe, respeita apenas empresa explícita simples.
+  if (!team && normalizeText(ex.company) === "tranenge") return "Tranenge";
+  return "Val Rocha";
+}
+
 export function normalizeDirection(input: unknown): Direction {
   const s = normalizeText(input);
   if (!s) return null;
@@ -224,7 +233,11 @@ export function classifyLocation(ex: Execution): Execution {
   let status: Execution["classification_status"] = "OK";
   let reason: string | null = null;
 
-  if (structure) {
+  if (ex.location_type && ex.location_code) {
+    lt = ex.location_type;
+    lc = ex.location_code;
+    reason = `Local informado explicitamente no lançamento: ${ex.location_code}`;
+  } else if (structure) {
     lt = structure.type;
     lc = structure.code;
     reason = `Local explícito reconhecido em Programação/Observações: ${structure.name}`;
@@ -268,6 +281,7 @@ export function normalizeExecution(ex: Execution): Execution {
   const m = mapActivity(ex.activity_raw);
   return classifyLocation({
     ...ex,
+    company: executionCompany(ex),
     measurement: ex.measurement || measurementForDate(ex.date),
     activity_id: ex.activity_id ?? m.activity_id,
     activity_name: ex.activity_name ?? m.activity_name,

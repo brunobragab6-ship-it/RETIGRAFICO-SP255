@@ -4,7 +4,7 @@ import { useExecutions } from "@/components/ExecutionProvider";
 import { parseKartadoWorkbook } from "@/lib/import-kartado";
 import type { ImportPreview } from "@/lib/types";
 import { displayResource } from "@/lib/retigraph";
-import { formatKm } from "@/lib/domain";
+import { executionCompany, formatKm } from "@/lib/domain";
 
 function fmt(n: unknown) {
   return typeof n === "number" ? n.toLocaleString("pt-BR", { maximumFractionDigits: 3 }) : String(n ?? "");
@@ -70,9 +70,9 @@ export default function Importar() {
         </div>
 
         <div className="table-wrap"><table className="data-table"><thead><tr>
-          <th>DATA</th><th>RECURSO DO KARTADO</th><th>LOCAL</th><th>KM</th><th>QTD.</th><th>R$ UNIT.</th><th>R$ RECURSO</th><th>MAPEAMENTO</th><th>CLASSIF.</th>
+          <th>DATA</th><th>RECURSO DO KARTADO</th><th>EMPRESA</th><th>EQUIPE</th><th>LOCAL</th><th>KM</th><th>QTD.</th><th>R$ UNIT.</th><th>R$ RECURSO</th><th>MAPEAMENTO</th><th>CLASSIF.</th>
         </tr></thead><tbody>{preview.executions.map(x => <tr key={x.id}>
-          <td>{x.date}</td><td>{displayResource(x)}</td><td>{x.location_code || "-"}</td>
+          <td>{x.date}</td><td>{displayResource(x)}</td><td>{executionCompany(x)}</td><td>{x.team || "-"}</td><td>{x.location_code || "-"}</td>
           <td>{formatKm(x.km_start_m) || "-"} → {formatKm(x.km_end_m) || "-"}</td>
           <td>{fmt(x.quantity)} {x.unit}</td><td>{x.unit_price != null ? `R$ ${fmt(x.unit_price)}` : "-"}</td><td>{x.resource_value != null ? `R$ ${fmt(x.resource_value)}` : "-"}</td>
           <td><span className={`badge ${x.mapping_status === "MAPPED" ? "ok" : "warn"}`}>{x.mapping_status}</span></td>
