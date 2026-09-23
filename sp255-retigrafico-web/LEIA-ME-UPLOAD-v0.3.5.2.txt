@@ -1,0 +1,11 @@
+ATUALIZAÇÃO v0.3.5.2 — CORREÇÃO BUILD VERCEL
+
+Erro corrigido:
+- unitPrice podia retornar null em lib/accumulated.ts, mas o tipo exige number.
+
+Correção aplicada:
+- fallback 0 quando não houver valor unitário calculável.
+- aplicado tanto no resumo acumulado quanto no detalhe.
+
+Validação:
+- bibliotecas TypeScript do projeto verificadas após a correção sem erros internos.
