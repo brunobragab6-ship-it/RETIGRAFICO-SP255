@@ -1,0 +1,15 @@
+SP-255 RETIGRÁFICO WEB — v0.3.5.3
+
+AJUSTE:
+- O Retigráfico agora memoriza automaticamente o último conjunto de filtros utilizado.
+- Ao sair da tela e voltar, ou recarregar a página, são restaurados:
+  * Frente / Estrutura
+  * Medição / Acumulado
+  * Data inicial
+  * Data final
+  * Sentido
+  * Empresa(s)
+  * Natureza(s)
+  * Classe(s)
+- Os filtros ficam salvos no navegador pelo localStorage.
+- Se o armazenamento estiver inválido, o sistema volta aos filtros padrão sem quebrar a tela.

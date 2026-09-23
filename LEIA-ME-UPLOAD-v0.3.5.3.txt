@@ -1,0 +1,11 @@
+ATUALIZAÇÃO v0.3.5.3 — MEMÓRIA DOS FILTROS DO RETIGRÁFICO
+
+Envie a pasta sp255-retigrafico-web na raiz do repositório, como nas atualizações anteriores.
+
+Arquivos principais alterados:
+- app/retigrafico/page.tsx
+- components/Shell.tsx
+- app/page.tsx
+- package.json
+
+Depois do deploy, configure qualquer filtro no Retigráfico, navegue para outra tela e volte. O sistema deve restaurar o mesmo filtro automaticamente.
