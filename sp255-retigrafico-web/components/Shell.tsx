@@ -21,6 +21,6 @@ export default function Shell({ children }: { children: React.ReactNode }) {
   return <div className="app"><aside>
     <div className="brand"><div className="vr">VR</div><div><b>VAL ROCHA</b><span>SP-255 Engenharia</span></div></div>
     <nav>{nav.map(([href, label, I]) => <Link key={href} href={href} className={clsx(p === href && "active")}><I size={18} />{label}</Link>)}</nav>
-    <div className="sidefoot">Araraquara - Bocaina<br />Kartado → Retigráfico → Medição<br /><b>v0.3.5 · Consulta Rápida + Acumulados + Histórico</b></div>
+    <div className="sidefoot">Araraquara - Bocaina<br />Kartado → Retigráfico → Medição<br /><b>v0.3.5.1 · Consulta Rápida + Acumulados + Histórico</b></div>
   </aside><main>{children}</main></div>;
 }

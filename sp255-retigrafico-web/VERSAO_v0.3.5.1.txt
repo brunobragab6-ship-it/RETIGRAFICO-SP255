@@ -1,0 +1,3 @@
+SP-255 RETIGRÁFICO WEB — v0.3.5.1
+
+Correção de deploy: inclui todas as dependências locais das telas Consulta Rápida e Acumulados, especialmente lib/accumulated.ts, além das alterações de sincronização e histórico necessárias.

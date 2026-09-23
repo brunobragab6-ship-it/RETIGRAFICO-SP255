@@ -1,0 +1,13 @@
+ATUALIZAÇÃO v0.3.5.1 — CORREÇÃO DO ERRO DE BUILD NO VERCEL
+
+O patch v0.3.5 anterior não continha todos os arquivos dependentes.
+Esta versão inclui app/acumulados, app/consulta, lib/accumulated.ts, lib/measurement-history.ts e todos os arquivos alterados desde v0.3.1 necessários para a sincronização/histórico.
+
+UPLOAD:
+1. Abra a RAIZ do repositório RETIGRAFICO-SP255 no GitHub.
+2. Arraste a pasta sp255-retigrafico-web inteira para Upload files.
+3. Confirme que NÃO aparece sp255-retigrafico-web/sp255-retigrafico-web.
+4. Commit diretamente na main.
+5. Aguarde Vercel Ready.
+
+Após publicar, o menu deve mostrar Consulta Rápida e Acumulados Detalhados e o rodapé v0.3.5.1.
