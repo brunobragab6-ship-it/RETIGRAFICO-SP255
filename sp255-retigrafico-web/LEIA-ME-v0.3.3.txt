@@ -1,0 +1,28 @@
+SP-255 RETIGRÁFICO — v0.3.3
+
+PRINCIPAIS AJUSTES
+1. Nova tela ACUMULADOS:
+   - filtro por medição, frente/dispositivo, empresa, sentido, natureza, classe, recurso e status;
+   - acumulado anterior;
+   - quantidade da medição selecionada;
+   - acumulado até a medição selecionada;
+   - evolução MED 01 → medição escolhida;
+   - trechos/KMs e volumes que compõem a medição;
+   - memória detalhada por data/Serial;
+   - exportação Excel.
+
+2. HISTÓRICO DE MEDIÇÕES:
+   - MED 01 a MED 05 podem ser importadas sem uma apagar a outra;
+   - durante MED 06, reimportar a fotografia atualizada da MED 06 atualiza somente a MED 06;
+   - correções de quantidade, KM, data, status e valor substituem o mesmo Serial + Recurso_N;
+   - exclusões são aplicadas somente na(s) medição(ões) presentes no arquivo;
+   - lançamentos manuais são preservados.
+
+3. FECHAMENTO DE MEDIÇÃO:
+   - regra da obra permanece 11 → 10;
+   - MED 06 = 11/09/2026 a 10/10/2026;
+   - em 11/10/2026 os novos apontamentos passam automaticamente para MED 07;
+   - tela mostra EM ANDAMENTO / FECHADA conforme a data.
+
+IMPORTANTE PARA SINCRONIZAÇÃO
+Para que exclusões sejam detectadas corretamente, o arquivo de uma medição deve representar a fotografia completa dos apontamentos atualmente válidos/aprovados daquela medição.

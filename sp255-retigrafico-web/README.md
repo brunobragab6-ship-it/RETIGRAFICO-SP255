@@ -1,3 +1,7 @@
+# SP-255 Retigráfico Web — v0.3.3
+
+**Novo:** histórico acumulado por medição, sincronização seletiva MED 01→06 e consulta de volumes/KMs por Frente/Dispositivo.
+
 # SP-255 — Retigráfico + Caderno Diário + Prévia de Medição
 
 Versão focada em uma única fonte operacional: **Apontamentos (simplificado).xlsx**, exportado do Kartado.
