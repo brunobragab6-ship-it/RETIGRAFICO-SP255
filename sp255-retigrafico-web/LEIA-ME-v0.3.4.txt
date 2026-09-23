@@ -1,0 +1,37 @@
+SP-255 RETIGRÁFICO — v0.3.4
+
+NOVO: CONSULTA RÁPIDA DE ACUMULADOS
+- Aba exclusiva "Consulta Rápida".
+- Selecione medição + recurso + frente/dispositivo + empresa + sentido.
+- Mostra imediatamente:
+  * acumulado até a medição anterior;
+  * quantidade da medição selecionada;
+  * acumulado até a medição selecionada;
+  * R$ da medição;
+  * R$ acumulado;
+  * evolução MED 01...MED atual;
+  * KMs/trechos que formam o volume.
+
+NOVO: POSIÇÃO FINANCEIRA
+- MED 01...medições fechadas: total R$ da base APROVADA.
+- Medição corrente: total R$ APONTADO enquanto estiver em andamento.
+
+NOVO: IMPORTAÇÃO EM DUAS ÁREAS
+1) HISTÓRICO APROVADO
+   - aceita um único Apontamentos (simplificado).xlsx contendo MED 01, 02, 03, 04 e 05 juntas;
+   - pode também receber o fechamento aprovado de uma medição isolada;
+   - ao importar MED 06 aprovada, substitui a fotografia corrente da MED 06.
+
+2) MEDIÇÃO CORRENTE
+   - aceita somente uma medição por arquivo;
+   - reimporte quantas vezes quiser durante o mês;
+   - Serial + Recurso_N é atualizado se mudar quantidade, KM, valor, status etc.;
+   - recursos novos entram e recursos apagados saem da fotografia corrente.
+
+FECHAMENTO
+- Quando a MED 06 for fechada, importe a versão APROVADA na área HISTÓRICO APROVADO.
+- A MED 06 passa a ser tratada como MEDIDA/APROVADA.
+- A próxima medição corrente passa a ser MED 07.
+
+ATENÇÃO
+- O sistema continua usando localStorage nesta etapa. Os dados ficam salvos no navegador até a integração definitiva com Supabase.

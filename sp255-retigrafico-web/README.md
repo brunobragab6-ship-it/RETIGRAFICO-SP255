@@ -56,3 +56,10 @@ Depois de atualizar os arquivos no GitHub, o Vercel faz novo deploy automaticame
 - primeira reimportação desta versão também migra os IDs antigos, evitando resíduos das versões anteriores.
 
 **Importante:** para sincronização destrutiva correta, importe sempre o arquivo completo de `Apontamentos (simplificado)` exportado do Kartado.
+
+## v0.3.4 — Consulta rápida e fechamento de medições
+
+- Nova aba **Consulta Rápida** para responder acumulados por recurso/frente em segundos.
+- Financeiro por medição: histórico aprovado x total apontado da medição corrente.
+- Importador separado em **Histórico Aprovado** (pode conter várias medições) e **Medição Corrente** (uma medição, sincronização diária).
+- Fechamento: importar a medição aprovada no Histórico substitui a fotografia corrente e avança a referência para a próxima medição.
