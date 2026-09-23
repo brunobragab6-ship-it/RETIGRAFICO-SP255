@@ -104,6 +104,24 @@ export function measurementForDate(iso: string) {
   return `MED ${String(med).padStart(2, "0")}`;
 }
 
+
+export function measurementNumber(med: string) {
+  return Number(String(med || "").match(/\d+/)?.[0] || 0);
+}
+
+export function measurementStatus(med: string, today = new Date()) {
+  const p = measurementPeriod(med);
+  if (!p) return "SEM PERÍODO";
+  const iso = `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,"0")}-${String(today.getDate()).padStart(2,"0")}`;
+  if (iso < p.start) return "FUTURA";
+  if (iso > p.end) return "FECHADA";
+  return "EM ANDAMENTO";
+}
+
+export function availableMeasurements(from = 1, to = 12) {
+  return Array.from({length: Math.max(0, to-from+1)}, (_,i)=>`MED ${String(from+i).padStart(2,"0")}`);
+}
+
 export function measurementPeriod(med: string) {
   const n = Number(String(med).match(/\d+/)?.[0] ?? 0);
   if (!n) return null;
@@ -277,12 +295,24 @@ export function classifyLocation(ex: Execution): Execution {
   };
 }
 
+
+export function inferDataKind(ex: Pick<Execution, "id" | "source" | "measurement" | "data_kind">): Execution["data_kind"] {
+  if (ex.data_kind) return ex.data_kind;
+  const id = String(ex.id || "").toLowerCase();
+  const source = String(ex.source || "").toLowerCase();
+  if (id.startsWith("manual-") || source.includes("lançamento manual") || source.includes("lancamento manual")) return "MANUAL";
+  // Migração automática das versões antigas: MED 01–05 já encerradas entram como histórico;
+  // medições posteriores entram como fotografia corrente até serem reimportadas como aprovadas.
+  return measurementNumber(ex.measurement) > 0 && measurementNumber(ex.measurement) <= 5 ? "APPROVED_HISTORY" : "CURRENT_POINTED";
+}
+
 export function normalizeExecution(ex: Execution): Execution {
   const m = mapActivity(ex.activity_raw);
   return classifyLocation({
     ...ex,
     company: executionCompany(ex),
     measurement: ex.measurement || measurementForDate(ex.date),
+    data_kind: inferDataKind({ ...ex, measurement: ex.measurement || measurementForDate(ex.date) }),
     activity_id: ex.activity_id ?? m.activity_id,
     activity_name: ex.activity_name ?? m.activity_name,
     mapping_status: ex.activity_id ? "MAPPED" : m.status,

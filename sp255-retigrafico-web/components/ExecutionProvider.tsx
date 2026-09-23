@@ -1,12 +1,13 @@
 "use client";
 import React, { createContext, useContext, useEffect, useMemo, useState } from "react";
-import type { Execution } from "@/lib/types";
-import { clearExecutions, loadExecutions, saveExecutions } from "@/lib/local-store";
+import type { Execution, KartadoImportMode } from "@/lib/types";
+import { clearExecutions, loadExecutions, saveExecutions, syncKartadoSnapshot } from "@/lib/local-store";
 
 type Ctx = {
   executions: Execution[];
   setExecutions: (x: Execution[]) => void;
   add: (x: Execution[]) => void;
+  syncKartado: (x: Execution[], sourceName?: string, scopeMeasurements?: string[], mode?: KartadoImportMode) => void;
   reset: () => void;
 };
 
@@ -21,6 +22,7 @@ export function ExecutionProvider({ children }: { children: React.ReactNode }) {
     saveExecutions(x);
   };
 
+  // Usado para lançamento manual: acrescenta sem interferir na fotografia Kartado.
   const add = (inc: Execution[]) => {
     setState(cur => {
       const m = new Map(cur.map(x => [x.id, x]));
@@ -31,12 +33,17 @@ export function ExecutionProvider({ children }: { children: React.ReactNode }) {
     });
   };
 
+  // Usado exclusivamente no importador Kartado: o novo Excel substitui a fotografia anterior.
+  const syncKartado = (snapshot: Execution[], sourceName?: string, scopeMeasurements?: string[], mode: KartadoImportMode = "CURRENT_POINTED") => {
+    setState(cur => syncKartadoSnapshot(cur, snapshot, sourceName, scopeMeasurements, mode));
+  };
+
   const reset = () => {
     clearExecutions();
     setState([]);
   };
 
-  const value = useMemo(() => ({ executions, setExecutions, add, reset }), [executions]);
+  const value = useMemo(() => ({ executions, setExecutions, add, syncKartado, reset }), [executions]);
   return <C.Provider value={value}>{children}</C.Provider>;
 }
 

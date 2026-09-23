@@ -1,0 +1,19 @@
+SP-255 RETIGRÁFICO WEB — v0.3.5
+
+CORREÇÃO DE PUBLICAÇÃO:
+- Consulta Rápida visível no menu lateral.
+- Acumulados Detalhados visível no menu lateral.
+- Dashboard mostra explicitamente v0.3.5.
+- Mantém histórico aprovado x medição corrente.
+
+IMPORTANTE PARA GITHUB:
+1. Vá para a RAIZ do repositório RETIGRAFICO-SP255.
+2. Add file > Upload files.
+3. NÃO use "choose your files" para selecionar pastas.
+4. ARRASTE a pasta inteira sp255-retigrafico-web para a área de upload do GitHub.
+5. Confirme que aparecem caminhos como sp255-retigrafico-web/components/Shell.tsx e sp255-retigrafico-web/app/consulta/page.tsx.
+6. Commit directly to main.
+
+URL DE USO:
+Use sempre o domínio fixo de produção: https://retigrafico-sp-255.vercel.app
+Evite URLs de deployment com sufixos aleatórios, pois localStorage é separado por domínio.

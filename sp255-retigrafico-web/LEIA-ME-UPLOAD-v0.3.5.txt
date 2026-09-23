@@ -1,0 +1,18 @@
+ATUALIZAÇÃO v0.3.5 — MODO CERTO DE ENVIAR AO GITHUB
+
+O erro anterior ocorreu porque arquivos da raiz (ex.: package.json) foram atualizados, mas arquivos dentro de pastas (components/app/lib) não foram substituídos.
+
+FAÇA ASSIM:
+- No GitHub, fique na RAIZ do repositório RETIGRAFICO-SP255.
+- Add file > Upload files.
+- Extraia este ZIP no Windows.
+- ARRASTE a pasta sp255-retigrafico-web inteira do Windows Explorer para a área pontilhada do GitHub.
+- NÃO clique em "choose your files" para selecionar pastas.
+- Antes do commit, procure na lista:
+  /sp255-retigrafico-web/components/Shell.tsx
+  /sp255-retigrafico-web/app/consulta/page.tsx
+  /sp255-retigrafico-web/app/acumulados/page.tsx
+- Commit directly to main.
+- Aguarde Vercel Ready.
+- Abra https://retigrafico-sp-255.vercel.app e use Ctrl+F5.
+- O rodapé deve mostrar v0.3.5.

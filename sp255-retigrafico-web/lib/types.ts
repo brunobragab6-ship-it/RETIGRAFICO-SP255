@@ -1,5 +1,7 @@
 export type LocationType = "FRENTE" | "DISPOSITIVO" | "REMODELACAO" | "OAE";
 export type Direction = "PN" | "PS" | "AMBOS" | null;
+export type MeasurementDataKind = "APPROVED_HISTORY" | "CURRENT_POINTED" | "MANUAL";
+export type KartadoImportMode = "APPROVED_HISTORY" | "CURRENT_POINTED";
 
 export interface Location {
   type: LocationType;
@@ -37,6 +39,8 @@ export interface Execution {
   id: string;
   date: string;
   measurement: string;
+  // Origem lógica da medição: histórico aprovado/fechado, fotografia corrente ou lançamento manual.
+  data_kind?: MeasurementDataKind;
 
   // Recurso exatamente como veio do Kartado + vínculo canônico quando conhecido.
   resource_raw?: string | null;
@@ -92,12 +96,35 @@ export interface Execution {
   memory?: Record<string, number | string | null>;
 }
 
+export type ImportChangeKind = "ADDED" | "UPDATED" | "REMOVED" | "UNCHANGED";
+
+export interface ImportChange {
+  kind: ImportChangeKind;
+  key: string;
+  fields: string[];
+  before?: Execution;
+  after?: Execution;
+}
+
 export interface ImportPreview {
+  importMode?: KartadoImportMode;
   executions: Execution[];
   pendingMappings: Execution[];
   conflicts: Execution[];
   duplicates: Execution[];
   sourceName: string;
+  scopeMeasurements?: string[];
   sourceRows?: number;
   resourceColumns?: number;
+  removedExecutions?: Execution[];
+  changes?: ImportChange[];
+  syncStats?: {
+    added: number;
+    updated: number;
+    removed: number;
+    unchanged: number;
+    totalAfter: number;
+    manualPreserved: number;
+  };
+  syncWarnings?: string[];
 }
