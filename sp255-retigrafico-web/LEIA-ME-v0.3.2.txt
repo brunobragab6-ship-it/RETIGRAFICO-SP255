@@ -1,0 +1,20 @@
+SP-255 — v0.3.2 — SINCRONIZAÇÃO COMPLETA DO KARTADO
+
+OBJETIVO
+Ao reimportar Apontamentos (simplificado), o sistema deve refletir exatamente o estado atual do Kartado.
+
+REGRA
+- Mesmo Serial + mesmo Recurso_N = mesmo registro lógico.
+- Quantidade mudou: ATUALIZA.
+- KM inicial/final mudou: ATUALIZA.
+- Data mudou: ATUALIZA.
+- Status/valor/equipe/recurso mudou: ATUALIZA.
+- Recurso novo: ADICIONA.
+- Recurso/apontamento que não existe mais no Excel atual: REMOVE da base Kartado.
+- Lançamento manual: PRESERVA.
+
+A tela de importação mostra antes da confirmação:
+NOVOS | ALTERADOS | EXCLUÍDOS | SEM ALTERAÇÃO
+
+IMPORTANTE
+Sempre exporte e importe o Apontamentos (simplificado) COMPLETO. Um arquivo parcial pode fazer o sistema entender que itens ausentes foram excluídos.

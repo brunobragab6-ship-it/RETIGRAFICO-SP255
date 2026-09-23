@@ -40,3 +40,15 @@ Depois de atualizar os arquivos no GitHub, o Vercel faz novo deploy automaticame
 - modo manual de avanço;
 - Prévia por período livre, sentido, empresa, natureza e classe;
 - Excel único com PREVIA 2A, PREVIA 2B, MEMORIA DIARIA e PENDENCIAS.
+
+## v0.3.2 — sincronização completa do Kartado
+- o novo `Apontamentos (simplificado).xlsx` é tratado como fotografia oficial atual do Kartado;
+- identidade estável por `Serial + Recurso_N` (data/KM/quantidade deixam de fazer parte do ID);
+- correção de quantidade, KM, data, status, recurso, equipe e valores substitui o dado antigo;
+- recursos/apontamentos removidos do Excel atual são removidos da base Kartado do sistema;
+- novos recursos entram automaticamente;
+- lançamentos manuais são preservados;
+- a tela de importação mostra NOVOS, ALTERADOS, EXCLUÍDOS e SEM ALTERAÇÃO antes da confirmação;
+- primeira reimportação desta versão também migra os IDs antigos, evitando resíduos das versões anteriores.
+
+**Importante:** para sincronização destrutiva correta, importe sempre o arquivo completo de `Apontamentos (simplificado)` exportado do Kartado.
