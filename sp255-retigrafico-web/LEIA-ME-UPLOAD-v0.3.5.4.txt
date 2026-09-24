@@ -1,0 +1,4 @@
+UPLOAD v0.3.5.4
+Envie a pasta sp255-retigrafico-web na RAIZ do repositório RETIGRAFICO-SP255.
+Confira os caminhos /sp255-retigrafico-web/app/retigrafico/page.tsx e /sp255-retigrafico-web/app/globals.css.
+Commit direto na main e aguarde o Vercel ficar Ready.

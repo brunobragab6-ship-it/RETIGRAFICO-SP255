@@ -1,0 +1,5 @@
+SP-255 Retigráfico Web v0.3.5.4
+- Impressão/PDF do retigráfico em A4 paisagem com a grade completa ajustada à largura da página.
+- Botão MINIMIZAR TRANSPORTES / MOSTRAR TRANSPORTES.
+- Estado de transportes minimizados salvo junto aos últimos filtros do Retigráfico.
+- Painel manual não aparece no PDF.

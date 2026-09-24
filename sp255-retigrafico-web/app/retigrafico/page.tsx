@@ -1,5 +1,5 @@
 "use client";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useExecutions } from "@/components/ExecutionProvider";
 import MultiFilter from "@/components/MultiFilter";
 import { CATALOG, LOCATIONS, executionCompany, formatKm, measurementForDate, normalizeExecution } from "@/lib/domain";
@@ -15,12 +15,31 @@ function money(n: number | null | undefined) {
 }
 const accepted = (s?: string | null) => ["Executado", "Aprovado", ""].includes(s || "");
 
+function isTransportExecution(x: { activity_raw?: string | null; resource_raw?: string | null; activity_name?: string | null; nature?: string | null; class?: string | null }) {
+  const text = [x.activity_raw, x.resource_raw, x.activity_name, x.nature, x.class].filter(Boolean).join(" ").toLocaleLowerCase("pt-BR");
+  return text.includes("transporte");
+}
+
 function locationLot(loc?: Location | null) {
   if (!loc) return null;
   if (loc.lot) return loc.lot;
   const km = loc.km_anchor ?? loc.km_start ?? null;
   return km == null ? null : km < 117380 ? "2A" : "2B";
 }
+
+const RETIGRAFICO_FILTERS_KEY = "sp255:retigrafico:last-filters:v1";
+
+type RetigraficoSavedFilters = {
+  local?: string;
+  med?: string;
+  dir?: string;
+  companies?: string[];
+  natures?: string[];
+  classes?: string[];
+  dateStart?: string;
+  dateEnd?: string;
+  hideTransports?: boolean;
+};
 
 export default function Retigrafico() {
   const { executions, add } = useExecutions();
@@ -32,6 +51,8 @@ export default function Retigrafico() {
   const [classes, setClasses] = useState<string[]>([]);
   const [dateStart, setDateStart] = useState("");
   const [dateEnd, setDateEnd] = useState("");
+  const [hideTransports, setHideTransports] = useState(false);
+  const [filtersLoaded, setFiltersLoaded] = useState(false);
   const [manualOpen, setManualOpen] = useState(false);
   const [manualMsg, setManualMsg] = useState("");
   const [manual, setManual] = useState({
@@ -48,6 +69,36 @@ export default function Retigrafico() {
     notes: ""
   });
   const loc = LOCATIONS.find(x => x.code === local)!;
+
+  useEffect(() => {
+    try {
+      const raw = window.localStorage.getItem(RETIGRAFICO_FILTERS_KEY);
+      if (raw) {
+        const saved = JSON.parse(raw) as RetigraficoSavedFilters;
+        if (saved.local && LOCATIONS.some(x => x.code === saved.local)) setLocal(saved.local);
+        if (typeof saved.med === "string") setMed(saved.med);
+        if (typeof saved.dir === "string") setDir(saved.dir);
+        if (Array.isArray(saved.companies)) setCompanies(saved.companies.filter(x => typeof x === "string"));
+        if (Array.isArray(saved.natures)) setNatures(saved.natures.filter(x => typeof x === "string"));
+        if (Array.isArray(saved.classes)) setClasses(saved.classes.filter(x => typeof x === "string"));
+        if (typeof saved.dateStart === "string") setDateStart(saved.dateStart);
+        if (typeof saved.dateEnd === "string") setDateEnd(saved.dateEnd);
+        if (typeof saved.hideTransports === "boolean") setHideTransports(saved.hideTransports);
+      }
+    } catch {
+      // Se o armazenamento do navegador estiver corrompido, usa os filtros padrão.
+    } finally {
+      setFiltersLoaded(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!filtersLoaded) return;
+    const snapshot: RetigraficoSavedFilters = {
+      local, med, dir, companies, natures, classes, dateStart, dateEnd, hideTransports
+    };
+    window.localStorage.setItem(RETIGRAFICO_FILTERS_KEY, JSON.stringify(snapshot));
+  }, [filtersLoaded, local, med, dir, companies, natures, classes, dateStart, dateEnd, hideTransports]);
 
   const measurements = useMemo(() => Array.from(new Set(executions.map(x => x.measurement).filter(Boolean))).sort(), [executions]);
   const companyOptions = ["Val Rocha", "Tranenge"];
@@ -69,10 +120,13 @@ export default function Retigrafico() {
     accepted(x.status)
   ), [executions, local, med, dateStart, dateEnd, dir, companies, natures, classes]);
 
+  const visibleFiltered = useMemo(() => hideTransports ? filtered.filter(x => !isTransportExecution(x)) : filtered, [filtered, hideTransports]);
+  const hiddenTransportCount = filtered.length - visibleFiltered.length;
+
   const isFront = loc?.type === "FRENTE";
   const buckets = isFront ? makeBuckets(loc.km_start!, loc.km_end!, 100) : [];
-  const acts = activityRows(filtered);
-  const unrepresented = isFront ? filtered.filter(x => x.km_min_m == null || x.km_max_m == null) : [];
+  const acts = activityRows(visibleFiltered);
+  const unrepresented = isFront ? visibleFiltered.filter(x => x.km_min_m == null || x.km_max_m == null) : [];
 
   const manualLoc = LOCATIONS.find(x => x.code === manual.local) || null;
   const manualLot = locationLot(manualLoc);
@@ -127,6 +181,14 @@ export default function Retigrafico() {
 
   return <>
     <div className="page-title"><div><h1>Retigráfico</h1><p>Recursos do Kartado por KM, com filtros múltiplos, valores financeiros e lançamento manual.</p></div></div>
+    <div className="print-only print-filter-summary">
+      <b>{loc.name}</b> · {med || "Acumulado"} · {dir || "Todos os sentidos"}
+      {dateStart ? ` · De ${dateStart}` : ""}{dateEnd ? ` · Até ${dateEnd}` : ""}
+      {companies.length ? ` · Empresa: ${companies.join(", ")}` : ""}
+      {natures.length ? ` · Natureza: ${natures.join(", ")}` : ""}
+      {classes.length ? ` · Classe: ${classes.join(", ")}` : ""}
+      {hideTransports ? " · Transportes minimizados" : ""}
+    </div>
     <div className="toolbar filter-line">
       <select value={local} onChange={e => setLocal(e.target.value)}>{LOCATIONS.map(x => <option key={x.code} value={x.code}>{x.type === "FRENTE" ? `Frente ${x.code}` : x.name}</option>)}</select>
       <select value={med} onChange={e => setMed(e.target.value)}><option value="">Acumulado</option>{measurements.map(m => <option key={m}>{m}</option>)}</select>
@@ -136,9 +198,10 @@ export default function Retigrafico() {
       <MultiFilter label="Empresas" options={companyOptions} selected={companies} onChange={setCompanies} />
       <MultiFilter label="Naturezas" options={natureOptions} selected={natures} onChange={v => { setNatures(v); setClasses([]); }} />
       <MultiFilter label="Classes" options={classOptions} selected={classes} onChange={setClasses} />
+      <button className={`btn ${hideTransports ? "warn" : "secondary"}`} onClick={() => setHideTransports(v => !v)}>{hideTransports ? "MOSTRAR TRANSPORTES" : "MINIMIZAR TRANSPORTES"}</button>
       <button className="btn secondary" onClick={() => window.print()}>IMPRIMIR / PDF</button>
       <button className="btn" onClick={() => setManualOpen(v => !v)}>{manualOpen ? "FECHAR MANUAL" : "MODO MANUAL"}</button>
-      <span className="tiny muted">{filtered.length} recursos executados</span>
+      <span className="tiny muted">{visibleFiltered.length} recursos exibidos{hideTransports && hiddenTransportCount ? ` · ${hiddenTransportCount} transporte(s) oculto(s)` : ""}</span>
     </div>
 
     {manualOpen && <div className="manual-panel">
@@ -173,7 +236,7 @@ export default function Retigrafico() {
       <div className="alert">Frente {loc.code}: {formatKm(loc.km_start)} → {formatKm(loc.km_end)}. Uma célula fica marcada quando qualquer parte do trecho executado cruza o intervalo de 100 m.</div>
       {unrepresented.length > 0 && <div className="alert"><b>{unrepresented.length} recurso(s) sem KM linear.</b> Eles aparecem na lista “Execuções não lineares” abaixo, inclusive compactações de Ramo/Dispositivo quando não houver trecho linear.</div>}
       <div className="ret-wrap"><table className="ret"><thead><tr><th>RECURSO / ITEM</th><th className="qty-col">QTD.</th><th className="money-col">R$ UNIT.</th><th className="money-col">R$ EXEC.</th>{buckets.map(b => <th key={b.start}>{b.label}</th>)}</tr></thead><tbody>{acts.map(a => {
-        const xs = filtered.filter(x => displayResource(x) === a);
+        const xs = visibleFiltered.filter(x => displayResource(x) === a);
         const qty = xs.reduce((s, x) => s + (typeof x.quantity === "number" ? x.quantity : 0), 0);
         const totalValue = xs.reduce((s, x) => s + executionValue(x), 0);
         const unitPrice = qty ? totalValue / qty : executionUnitPrice(xs[0]);
@@ -186,8 +249,8 @@ export default function Retigrafico() {
 
       {unrepresented.length > 0 && <div className="panel"><h2>EXECUÇÕES NÃO LINEARES / SEM KM REPRESENTÁVEL</h2><div className="table-wrap"><table className="data-table"><thead><tr><th>DATA</th><th>RECURSO</th><th>NATUREZA</th><th>CLASSE</th><th>LOCAL/PROGRAMAÇÃO</th><th>QTD.</th><th>R$ UNIT.</th><th>R$ EXEC.</th><th>EMPRESA</th></tr></thead><tbody>{unrepresented.map(x => <tr key={x.id}><td>{x.date}</td><td>{displayResource(x)}</td><td>{x.nature}</td><td>{x.class}</td><td>{x.ramo_local || x.programming || x.location_code}</td><td>{fmt(x.quantity)} {x.unit}</td><td>{money(executionUnitPrice(x))}</td><td>{money(executionValue(x))}</td><td>{executionCompany(x)}</td></tr>)}</tbody></table></div></div>}
 
-      {filtered.length > 0 && <div className="panel"><h2>RESUMO DOS RECURSOS — {loc.name}</h2><div className="table-wrap"><table className="data-table"><thead><tr><th>RECURSO</th><th>NATUREZA</th><th>CLASSE</th><th>QTD.</th><th>UN.</th><th>R$ UNIT. MÉDIO</th><th>R$ EXECUTADO</th><th>DIAS</th><th>KM MENOR</th><th>KM MAIOR</th></tr></thead><tbody>{acts.map(a => {
-        const xs = filtered.filter(x => displayResource(x) === a);
+      {visibleFiltered.length > 0 && <div className="panel"><h2>RESUMO DOS RECURSOS — {loc.name}</h2><div className="table-wrap"><table className="data-table"><thead><tr><th>RECURSO</th><th>NATUREZA</th><th>CLASSE</th><th>QTD.</th><th>UN.</th><th>R$ UNIT. MÉDIO</th><th>R$ EXECUTADO</th><th>DIAS</th><th>KM MENOR</th><th>KM MAIOR</th></tr></thead><tbody>{acts.map(a => {
+        const xs = visibleFiltered.filter(x => displayResource(x) === a);
         const qty = xs.reduce((s, x) => s + (typeof x.quantity === "number" ? x.quantity : 0), 0);
         const value = xs.reduce((s, x) => s + executionValue(x), 0);
         const days = Array.from(new Set(xs.map(x => x.date))).sort();
@@ -195,6 +258,6 @@ export default function Retigrafico() {
         const maxs = xs.map(x => x.km_max_m).filter((x): x is number => x != null);
         return <tr key={a}><td>{a}</td><td>{xs[0]?.nature || ""}</td><td>{xs[0]?.class || ""}</td><td>{fmt(qty)}</td><td>{xs[0]?.unit || ""}</td><td>{money(qty ? value / qty : executionUnitPrice(xs[0]))}</td><td><b>{money(value)}</b></td><td>{days.length}</td><td>{mins.length ? formatKm(Math.min(...mins)) : "-"}</td><td>{maxs.length ? formatKm(Math.max(...maxs)) : "-"}</td></tr>;
       })}</tbody></table></div></div>}
-    </> : <div className="device-list">{filtered.map(x => <div className="device-row" key={x.id}><b>{displayResource(x)}</b><div>{x.date} · {fmt(x.quantity)} {x.unit} · {x.direction} · <b>{money(executionValue(x))}</b></div><div className="tiny muted">R$ unit.: {money(executionUnitPrice(x))} · Empresa: {executionCompany(x)} · KM ref.: {formatKm(x.km_min_m)} · Serial: {x.serial_kartado || "MANUAL"} · Programação: {x.programming || "-"}</div></div>)}{filtered.length === 0 && <div className="alert">Nenhum recurso para esta estrutura com os filtros atuais.</div>}</div>}
+    </> : <div className="device-list">{visibleFiltered.map(x => <div className="device-row" key={x.id}><b>{displayResource(x)}</b><div>{x.date} · {fmt(x.quantity)} {x.unit} · {x.direction} · <b>{money(executionValue(x))}</b></div><div className="tiny muted">R$ unit.: {money(executionUnitPrice(x))} · Empresa: {executionCompany(x)} · KM ref.: {formatKm(x.km_min_m)} · Serial: {x.serial_kartado || "MANUAL"} · Programação: {x.programming || "-"}</div></div>)}{visibleFiltered.length === 0 && <div className="alert">Nenhum recurso para esta estrutura com os filtros atuais.</div>}</div>}
   </>;
 }
