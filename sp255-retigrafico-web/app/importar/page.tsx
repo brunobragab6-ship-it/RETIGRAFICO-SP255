@@ -1,5 +1,6 @@
 "use client";
 import { useMemo, useState } from "react";
+import MeasurementImportOptions from "@/components/MeasurementImportOptions";
 import { useExecutions } from "@/components/ExecutionProvider";
 import { parseKartadoWorkbook } from "@/lib/import-kartado";
 import type { Execution, ImportPreview, KartadoImportMode } from "@/lib/types";
@@ -26,7 +27,11 @@ export default function Importar(){
       const p=parseKartadoWorkbook(await file.arrayBuffer(),file.name,executions,mode);
       const s=p.syncStats;
       set({preview:p,error:"",msg:s?`Comparação: ${s.added} novo(s), ${s.updated} alterado(s), ${s.removed} removido(s), ${s.unchanged} sem alteração.`:`${p.executions.length} recursos lidos.`});
-    }catch(e:any){set({preview:null,msg:"",error:e?.message||"Falha na leitura do Excel."});}
+    }catch(e:unknown){
+      const error=e instanceof Error?e:new Error("Falha na leitura do Excel.");
+      set({preview:null,msg:"",error:error.message});
+      throw error;
+    }
   }
   function confirmImport(slot:Slot,mode:KartadoImportMode){
     const p=slot.preview;if(!p)return;
@@ -55,9 +60,23 @@ export default function Importar(){
   return <>
     <div className="page-title"><div><h1>Importar Apontamentos</h1><p>Duas bases separadas: histórico aprovado das medições fechadas e fotografia corrente da medição em andamento.</p></div><span className="badge warn">CORRENTE: {currentMed}</span></div>
 
-    <div className="panel"><h2>1. HISTÓRICO APROVADO — MEDIÇÕES FECHADAS</h2><div style={{padding:14}}><div className="alert"><b>Use aqui os apontamentos APROVADOS.</b> Você pode subir em um único Excel MED 01 + 02 + 03 + 04 + 05. No fechamento da MED 06, importe a versão aprovada aqui; ela substitui a fotografia corrente da MED 06 e o sistema passa a considerar a próxima medição como corrente.</div><div className="drop"><b>IMPORTAR HISTÓRICO APROVADO</b><div className="tiny muted">Aceita uma ou várias medições no mesmo Apontamentos (simplificado).xlsx.</div><input type="file" accept=".xlsx" onChange={e=>e.target.files?.[0]&&handle(e.target.files[0],"APPROVED_HISTORY")}/></div>{history.msg&&<div className="alert success">{history.msg}</div>}{history.error&&<div className="alert bad">{history.error}</div>}<Preview slot={history} mode="APPROVED_HISTORY"/></div></div>
+    <section className="panel space-y-4 rounded-xl bg-background p-4 text-foreground" style={{padding:14}}>
+      <MeasurementImportOptions onImport={async ({file,mode})=>{
+        await handle(file,mode==="aprovadas"?"APPROVED_HISTORY":"CURRENT_POINTED");
+      }}/>
+      <div className="subtle-note mt-4 text-sm">A seleção do arquivo prepara a conferência; nada é salvo antes da confirmação abaixo. A medição em andamento deve conter uma única medição. O acumulado aprovado pode reunir várias medições e substitui a base corrente dos mesmos períodos.</div>
+    </section>
 
-    <div className="panel"><h2>2. MEDIÇÃO CORRENTE — ATUALIZAÇÃO DIÁRIA</h2><div style={{padding:14}}><div className="alert"><b>Use aqui somente a medição em andamento.</b> Ex.: durante a MED 06, importe a fotografia completa da MED 06 quantas vezes precisar. O mesmo Serial + Recurso_N é atualizado se mudar quantidade, KM, valor, status ou demais dados; inclusões entram e exclusões saem.</div><div className="drop"><b>IMPORTAR MEDIÇÃO CORRENTE</b><div className="tiny muted">O arquivo deve conter somente uma medição. Hoje a referência da base é <b>{currentMed}</b>.</div><input type="file" accept=".xlsx" onChange={e=>e.target.files?.[0]&&handle(e.target.files[0],"CURRENT_POINTED")}/></div>{current.msg&&<div className="alert success">{current.msg}</div>}{current.error&&<div className="alert bad">{current.error}</div>}<Preview slot={current} mode="CURRENT_POINTED"/></div></div>
+    <section className="space-y-3 bg-background text-foreground" aria-label="Conferência da MED em andamento">
+      {current.msg&&<div className="alert" role="status">{current.msg}</div>}
+      {current.error&&<div className="alert bad" role="alert">{current.error}</div>}
+      <Preview slot={current} mode="CURRENT_POINTED"/>
+    </section>
+    <section className="space-y-3 bg-background text-foreground" aria-label="Conferência das medições aprovadas">
+      {history.msg&&<div className="alert" role="status">{history.msg}</div>}
+      {history.error&&<div className="alert bad" role="alert">{history.error}</div>}
+      <Preview slot={history} mode="APPROVED_HISTORY"/>
+    </section>
 
     <div className="panel"><h2>CONTROLE DAS MEDIÇÕES</h2><div className="table-wrap"><table className="data-table"><thead><tr><th>MEDIÇÃO</th><th>PERÍODO</th><th>BASE</th><th>RECURSOS</th><th>TOTAL R$</th></tr></thead><tbody>{financial.map(r=>{const p=measurementPeriod(r.measurement);return <tr key={r.measurement}><td><b>{r.measurement}</b></td><td>{p?`${p.start} → ${p.end}`:"-"}</td><td><span className={`badge ${r.state.includes("APROVADO")?"ok":r.state.includes("ANDAMENTO")?"warn":""}`}>{r.state}</span></td><td>{r.resources}</td><td><b>{money(r.value)}</b></td></tr>})}</tbody></table></div><div className="subtle-note" style={{padding:10}}>Aprovadas na base: {approved.join(", ")||"nenhuma"}. Fotografias correntes: {pointed.join(", ")||"nenhuma"}.</div></div>
 

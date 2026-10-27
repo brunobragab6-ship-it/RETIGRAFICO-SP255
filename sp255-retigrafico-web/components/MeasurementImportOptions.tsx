@@ -28,14 +28,14 @@ const options: Option[] = [
     title: "MED em andamento",
     description: "Apontamentos da medição atual, ainda em conferência. Esta opção não representa aprovação dos lançamentos.",
     example: "Apontamentos (simplificado) - 2026-10-27T135636.144.xlsx",
-    button: "Importar MED em andamento",
+    button: "Conferir MED em andamento",
   },
   {
     mode: "aprovadas",
     title: "Acumulado das medições aprovadas",
     description: "Histórico das medições que já foram aprovadas. A planilha pode reunir várias medições anteriores.",
     example: "Apontamentos (simplificado) - 2026-10-20T172323.452.xlsx",
-    button: "Importar medições aprovadas",
+    button: "Conferir medições aprovadas",
   },
 ];
 
@@ -92,9 +92,9 @@ function ImportOption({ option, busy, runImport }: {
     setMessage("Validando a planilha…");
     try {
       const count = await validateSpreadsheet(file);
-      setMessage(`${count.toLocaleString("pt-BR")} apontamentos identificados. Importando…`);
+      setMessage(`${count.toLocaleString("pt-BR")} apontamentos identificados. Preparando conferência…`);
       await runImport({ mode: option.mode, file });
-      setMessage(`Importação concluída: ${option.title}.`);
+      setMessage(`Prévia preparada: ${option.title}. Confira as alterações abaixo e confirme para salvar.`);
     } catch (cause) {
       setMessage("");
       setError(cause instanceof Error ? cause.message : "Não foi possível importar a planilha. Tente novamente.");
@@ -131,7 +131,7 @@ function ImportOption({ option, busy, runImport }: {
         type="button"
         disabled={!file || busy || processing}
         onClick={submit}
-        className="mt-auto inline-flex items-center justify-center rounded-md bg-primary px-4 py-3 text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+        className="btn mt-auto inline-flex items-center justify-center rounded-md bg-primary px-4 py-3 text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
       >
         {processing ? "Processando…" : option.button}
       </button>
