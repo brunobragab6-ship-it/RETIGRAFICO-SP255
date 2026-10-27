@@ -3,9 +3,9 @@
   "version": "0.3.5.3",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start"
+    "dev": "next dev sp255-retigrafico-web",
+    "build": "next build sp255-retigrafico-web",
+    "start": "next start sp255-retigrafico-web"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.57.4",
